@@ -1,0 +1,46 @@
+name: Build NV Container Fuck Off for Windows
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Build standalone Windows executable
+        shell: pwsh
+        run: |
+          dotnet restore ./NVContainerFuckOff.csproj
+          dotnet publish ./NVContainerFuckOff.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:PublishReadyToRun=false -p:DebugType=None -p:DebugSymbols=false -o ./publish
+          if (-not (Test-Path './publish/NVContainerFuckOff.exe')) { throw 'Publish did not create the expected executable.' }
+      - name: Generate SHA256 checksum
+        shell: pwsh
+        run: |
+          $hash = (Get-FileHash './publish/NVContainerFuckOff.exe' -Algorithm SHA256).Hash.ToLowerInvariant()
+          "$hash  NVContainerFuckOff.exe" | Set-Content './publish/NVContainerFuckOff.exe.sha256' -Encoding ascii
+      - name: Upload executable for testing
+        uses: actions/upload-artifact@v4
+        with:
+          name: NVContainerFuckOff-Windows-x64
+          path: |
+            publish/NVContainerFuckOff.exe
+            publish/NVContainerFuckOff.exe.sha256
+      - name: Publish GitHub Release when a tag is pushed
+        if: startsWith(github.ref, 'refs/tags/v')
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create '${{ github.ref_name }}' './publish/NVContainerFuckOff.exe' './publish/NVContainerFuckOff.exe.sha256' --title 'NV Container Fuck Off ${{ github.ref_name }} — by HXPRO' --notes 'Single-file portable Windows x64 application. Unsigned executable. Download only if you trust and have reviewed the source. Requires administrator approval to control NVIDIA Display Container LS.' --verify-tag
+    permissions:
+      contents: write
