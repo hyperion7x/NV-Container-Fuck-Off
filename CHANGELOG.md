@@ -1,13 +1,13 @@
 # Changelog
 
-## v1.1.1 — 2026-11-18
-- Clarified distribution model: **one standalone EXE** for users, public source only for transparency.
-- GitHub Actions builds the EXE directly and publishes it as a Release download with SHA-256 checksum.
-- No CMD/PowerShell launcher; UAC is explicit, limited to the NVIDIA Display Container LS service.
-- Source files are not intended as an end-user download.
+## v1.2.0 — Native edition (HXPRO)
 
-## v1.1.0 — 2026-11-18
-- Windows Forms C# redesign, replacing a flagged CMD/PowerShell launcher.
+- Replaced .NET WinForms application (approximately 146 MB self-contained) with native Windows C/Win32 application.
+- New MSVC GitHub Actions workflow builds a small single-file x64 EXE.
+- Preserved ON/OFF controls, explicit service name, status checking, administrator UAC, warning and error display.
+- No runtime dependencies, shell scripts, PowerShell or installers in the end-user release.
+- The change preserves only the functionality of the earlier v1.1.1 release; users should test before deployment.
 
-## v1.0.0 — experimental
-- Initial PowerShell UI (not recommended for public use due to antivirus alerts).
+## v1.1.1
+
+- Windows Forms toggle with public C# source (previous edition).
