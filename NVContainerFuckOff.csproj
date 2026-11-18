@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <AssemblyName>NVContainerFuckOff</AssemblyName>
+    <RootNamespace>NVContainerFuckOff</RootNamespace>
+    <Authors>HXPRO</Authors>
+    <Version>1.1.1</Version>
+    <AssemblyVersion>1.1.1.1</AssemblyVersion>
+    <FileVersion>1.1.1.1</FileVersion>
+    <Product>NV Container Fuck Off</Product>
+    <Description>Explicit ON/OFF control for NVIDIA Display Container LS</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="System.ServiceProcess.ServiceController" Version="8.0.0" />
+  </ItemGroup>
+</Project>
